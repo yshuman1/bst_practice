@@ -48,3 +48,38 @@ func (n *Node) Insert(key int) {
 		}
 	}
 }
+
+func (n *Node) Delete(key int) *Node {
+	//search for the key to be deleted
+	if n.Key < key {
+		n.Right = n.Right.Delete(key)
+	} else if n.Key > key {
+		n.Left = n.Left.Delete(key)
+	} else {
+		// once found, if the left or right node is empty you return the opposite node
+		if n.Left == nil {
+			return n.Right
+		} else if n.Right == nil {
+			return n.Left
+		}
+		// if both child nodes exist, you need to find the next highest number in the BST
+		min := n.Right.Min()
+		n.Key = min
+		n.Right = n.Right.Delete(min)
+	}
+	return n
+}
+
+func (n *Node) Min() int {
+	if n.Left == nil {
+		return n.Key
+	}
+	return n.Left.Min()
+}
+
+func (n *Node) Max() int {
+	if n.Right == nil {
+		return n.Key
+	}
+	return n.Right.Max()
+}
